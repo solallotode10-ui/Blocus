@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="utf-8"><title>BLOCUS 3D</title><meta name="description" content="BLOCUS 3D : jeu de défense de barricade en 3D, avec mortiers, magasin et alliés."><meta property="og:title" content="BLOCUS 3D"><meta property="og:description" content="Tiens la barricade, recrute des alliés et survis aux vagues !"><meta name="theme-color" content="#16161a"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E✊%3C/text%3E%3C/svg%3E"><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<html lang="fr"><head><meta charset="utf-8"><title>BLOCUS 3D</title><meta name="description" content="BLOCUS 3D : jeu de défense de barricade en 3D, avec mortiers, magasin et alliés."><meta property="og:title" content="BLOCUS 3D"><meta property="og:description" content="Tiens la barricade, recrute des alliés et survis aux vagues !"><meta name="theme-color" content="#16161a"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E✊%3C/text%3E%3C/svg%3E"><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script>window.THREE||document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"><\/script>')</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>
 :root{--bg:#f3f1ec;--fg:#1d1d1b;--card:#fff;--acc:#d9381e;--bd:#cfcac0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -26,8 +26,10 @@
 <div id="wrap"><div id="fx"></div><div id="ov"></div><div id="ctl"><div id="joy"><div id="knob"></div></div><div id="btns"><button id="bk">😷</button><div id="joy2"><div id="knob2"></div></div></div></div></div>
 </div>
 <script>
+addEventListener('error',e=>{const o=document.getElementById('ov');if(!o)return;o.style.display='flex';o.innerHTML='<h2>⚠️ Oups</h2><div style="font-size:13px;line-height:1.5">'+(e.message||'Erreur')+'<br><br>Si ça parle de WebGL : active l’accélération matérielle dans Chrome, ou essaie un autre navigateur.</div>'});
+if(!window.THREE)throw new Error('Three.js n’a pas pu se charger (connexion bloquée ?)');
 const W=360,H=520,LINE=H-130,wrap=document.getElementById('wrap'),ov=document.getElementById('ov'),fxl=document.getElementById('fx'),$=id=>document.getElementById(id);
-const R=new THREE.WebGLRenderer({antialias:true});wrap.insertBefore(R.domElement,wrap.firstChild);R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+let R;try{R=new THREE.WebGLRenderer({antialias:true})}catch(e){R=new THREE.WebGLRenderer({antialias:false,powerPreference:'low-power'})}wrap.insertBefore(R.domElement,wrap.firstChild);R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x0f1219);scene.fog=new THREE.Fog(0x0f1219,420,1050);
 const cam=new THREE.PerspectiveCamera(50,1,1,3000);
 const hemi=new THREE.HemisphereLight(0x8fa0d8,0x1a1a20,.75);scene.add(hemi);const sun=new THREE.DirectionalLight(0xaab8ff,.7);sun.position.set(-150,400,150);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-300,right:300,top:400,bottom:-400,far:1200});scene.add(sun);
@@ -117,9 +119,4 @@ for(const g of S.cans){g.t+=dt/1.1;const k=Math.min(1,g.t);g.x=g.sx+(g.tx-g.sx)*
  S.cops=keep(S.cops,c=>c.hp>0);
  S.fx.forEach(f=>{f.l-=dt;f.h+=30*dt});S.fx=S.fx.filter(f=>f.l>0);
  S.booms.forEach(b=>{b.l-=dt});S.booms=keep(S.booms,b=>b.l>0);shake=Math.max(0,shake-dt*3);updFX(dt);
- if(S.toSpawn==0&&S.cops.length==0){run=false;S.coins+=10;S.score+=20;shop()}hud()}
-function boom(s){const wx=s.x-180,wz=s.y-260,wy=s.h,base=new THREE.Color(PAL[Math.random()*PAL.length|0]);
-for(let i=0;i<150;i++){const a=Math.random()*6.283,b=Math.acos(2*Math.random()-1),v=50+Math.random()*90;spark(wx,wy,wz,v*Math.sin(b)*Math.cos(a),v*Math.cos(b),v*Math.sin(b)*Math.sin(a),i%3?base:cYe,1+Math.random(),70)}
-for(let i=0;i<6;i++)smoke(wx+(Math.random()-.5)*20,wy+(Math.random()-.5)*20,wz+(Math.random()-.5)*20,34,1.6+Math.random());
-fl.position.set(wx,wy+10,wz);fl.color.copy(base);fl.intensity=3.5;shake=Math.max(shake,.35);snd('boom');
-S.cops.forEach(c=>{if(
+ if(S.toSpawn==0&&S.cops.length
