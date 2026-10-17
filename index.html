@@ -38,7 +38,7 @@ addEventListener('resize',resize);resize();
 const M=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.75},o||{}));
 const box=(w,h,d,c)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));m.castShadow=m.receiveShadow=true;return m};
 const ball=(r,c,o)=>{const m=new THREE.Mesh(new THREE.SphereGeometry(r,14,10),M(c,o));m.castShadow=true;return m};
-const ground=new THREE.Mesh(new THREE.PlaneGeometry(900,1600),M(0x3a3d45,{roughness:.35}));ground.receiveShadow=true;ground.rotation.x=-Math.PI/2;ground.position.z=-200;scene.add(ground);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(900,1600),M(0x4b4f5a,{roughness:.6}));ground.receiveShadow=true;ground.rotation.x=-Math.PI/2;ground.position.z=-200;scene.add(ground);
 for(let i=0;i<14;i++){const l=box(6,.5,30,0xcccccc);l.position.set(0,.3,-600+i*70);scene.add(l)}
 const wt=(()=>{const c=document.createElement('canvas');c.width=64;c.height=128;const g=c.getContext('2d');g.fillStyle='#2a2d36';g.fillRect(0,0,64,128);for(let y=6;y<124;y+=14)for(let x=6;x<60;x+=14){g.fillStyle=Math.random()<.35?'#ffcf7a':'#171a21';g.fillRect(x,y,8,8)}return new THREE.CanvasTexture(c)})();
 const wm=new THREE.MeshStandardMaterial({map:wt,emissiveMap:wt,emissive:0xffffff,emissiveIntensity:.5,roughness:.9});
@@ -51,7 +51,7 @@ function mkBarr(n){barG.clear();const z=LINE-n*14+14-260;for(let i=0;i<12;i++){c
 const P=new THREE.Group(),pb=new THREE.Mesh(new THREE.CylinderGeometry(9,11,30,12),M(0xd9381e)),ph=ball(8,0xffd2a8),mk=box(10,6,3,0x33cc66);
 pb.position.y=15;ph.position.y=37;mk.position.set(0,35,-7);mk.visible=false;P.add(pb,ph,mk);const tube=new THREE.Mesh(new THREE.CylinderGeometry(3.4,3.8,26,10),M(0x44484f,{metalness:.5}));tube.position.set(10,32,-8);tube.rotation.x=-1.047;const bp=box(14,18,6,0x2a3f2a);bp.position.set(0,22,7);P.add(tube,bp);scene.add(P);
 const shd=new THREE.Mesh(new THREE.TorusGeometry(15,2,6,16,Math.PI),M(0x3b82f6));shd.position.set(0,22,-10);shd.visible=false;P.add(shd);
-function mkCop(){const g=new THREE.Group(),b=box(18,26,12,0x1e2a4a),h=ball(7,0xf0c9a0),hm=new THREE.Mesh(new THREE.SphereGeometry(8,12,8,0,7,0,1.6),M(0x101830)),sh=box(16,28,2.5,0x9fb4c8),ar=box(4,4,22,0x111),hp=box(20,2.5,2,0xee3333),l1=box(6,16,7,0x151c33),l2=box(6,16,7,0x151c33),vz=box(9,3,2,0x223);
+function mkCop(){const g=new THREE.Group(),b=box(18,26,12,0x2f4c94),h=ball(7,0xf0c9a0),hm=new THREE.Mesh(new THREE.SphereGeometry(8,12,8,0,7,0,1.6),M(0x1a2a5a)),sh=box(16,28,2.5,0x9fb4c8),ar=box(4,4,22,0x111),hp=box(20,2.5,2,0xee3333),l1=box(6,16,7,0x151c33),l2=box(6,16,7,0x151c33),vz=box(9,3,2,0x223);
 sh.material.transparent=true;sh.material.opacity=.6;l1.geometry.translate(0,-8,0);l2.geometry.translate(0,-8,0);
 b.position.y=29;h.position.y=48;hm.position.y=49;vz.position.set(0,49,6.5);sh.position.set(-13,30,7);ar.position.set(11,36,10);hp.position.y=64;l1.position.set(-4,16,0);l2.position.set(4,16,0);g.add(b,h,hm,vz,sh,ar,hp,l1,l2);g.userData={ar,hp,l1,l2};return g}
 function mkCan(){return ball(5,0xaaaaaa)}
@@ -67,7 +67,7 @@ const cOr=new THREE.Color(0xff7a20),cYe=new THREE.Color(0xffd060),PAL=[0xff3b3b,
 function spark(x,y,z,vx,vy,vz,c,life,g){const i=SP.i=(SP.i+1)%SN,k=i*3;SP.pos[k]=x;SP.pos[k+1]=y;SP.pos[k+2]=z;SP.vel[k]=vx;SP.vel[k+1]=vy;SP.vel[k+2]=vz;SP.base[k]=c.r;SP.base[k+1]=c.g;SP.base[k+2]=c.b;SP.life[i]=SP.max[i]=life;SP.grav[i]=g}
 const smokes=[];function smoke(x,y,z,s,l){if(smokes.length>70)return;const m=new THREE.Sprite(new THREE.SpriteMaterial({map:ptex,color:0xb5b8c0,transparent:true,depthWrite:false,opacity:.45}));m.position.set(x,y,z);m.scale.setScalar(s);scene.add(m);smokes.push({m,l,ml:l,s,vx:(Math.random()-.5)*14,vy:10+Math.random()*10,vz:(Math.random()-.5)*14})}
 let dk=0;const CE={bg:new THREE.Color(0x3a2740),sky:new THREE.Color(0xe08a6a),gr:new THREE.Color(0x2a2230),sun:new THREE.Color(0xff9a5a)},CA={bg:new THREE.Color(0x8fc4ee),sky:new THREE.Color(0xdfeeff),gr:new THREE.Color(0x8a8a80),sun:new THREE.Color(0xfff2d6)};
-function applyDay(k){scene.background.copy(CE.bg).lerp(CA.bg,k);scene.fog.color.copy(scene.background);scene.fog.near=420+k*200;scene.fog.far=1050+k*500;hemi.color.copy(CE.sky).lerp(CA.sky,k);hemi.groundColor.copy(CE.gr).lerp(CA.gr,k);hemi.intensity=.7+.35*k;sun.color.copy(CE.sun).lerp(CA.sun,k);sun.intensity=.6+.55*k;sun.position.set(-300+180*k,120+300*k,100+100*k);wm.emissiveIntensity=.5-.45*k}
+function applyDay(k){scene.background.copy(CE.bg).lerp(CA.bg,k);scene.fog.color.copy(scene.background);scene.fog.near=700+k*300;scene.fog.far=1800+k*700;hemi.color.copy(CE.sky).lerp(CA.sky,k);hemi.groundColor.copy(CE.gr).lerp(CA.gr,k);hemi.intensity=1+.25*k;sun.color.copy(CE.sun).lerp(CA.sun,k);sun.intensity=.9+.4*k;sun.position.set(-300+180*k,120+300*k,100+100*k);wm.emissiveIntensity=.5-.45*k}
 function updFX(dt){dk+=(Math.min(1,(S.wave-1)/7)-dk)*Math.min(1,dt*.6);applyDay(dk);
  fires.forEach(f=>{for(let j=0;j<3;j++)spark(f.x+(Math.random()-.5)*10,24,f.z+(Math.random()-.5)*10,(Math.random()-.5)*14,30+Math.random()*40,(Math.random()-.5)*14,Math.random()<.5?cOr:cYe,.5+Math.random()*.4,-30)});
  fl.intensity=Math.max(0,fl.intensity-dt*9);fireL.intensity=1.1+Math.random()*.5;
@@ -86,7 +86,7 @@ if(t=='s'){const c1=box(11,3,1,0xd9381e),c2=box(3,11,1,0xd9381e);c1.position.set
 g.userData=u;return g}
 function addAlly(t){S.allies.push({type:t,hp:t=='m'?40:25,max:t=='m'?40:25,x:0,y:0,cd:1+Math.random()*2,i:S.allies.length})}
 function resume(){ov.style.display='none';run=true;last=performance.now();requestAnimationFrame(loop)}
-function newGame(){dk=0;if(S)['cops','cans','gas','shots','booms','allies'].forEach(k=>S[k]&&clear(S[k]));S={hp:100,max:100,score:0,coins:20,wave:0,ammo:8,shield:0,maskT:3,barr:0,px:W/2,py:H-60,cd:0,mask:0,maskCd:0,cops:[],cans:[],gas:[],shots:[],fx:[],booms:[],allies:[],rate:0,pow:0,toSpawn:0,spT:0};mkBarr(0);nextWave()}
+function newGame(){ov.onclick=null;dk=0;if(S)['cops','cans','gas','shots','booms','allies'].forEach(k=>S[k]&&clear(S[k]));S={hp:100,max:100,score:0,coins:20,wave:0,ammo:8,shield:0,maskT:3,barr:0,px:W/2,py:H-60,cd:0,mask:0,maskCd:0,cops:[],cans:[],gas:[],shots:[],fx:[],booms:[],allies:[],rate:0,pow:0,toSpawn:0,spT:0};mkBarr(0);nextWave()}
 function clear(a){a.forEach(o=>o.m&&scene.remove(o.m));a.length=0}
 function nextWave(){S.wave++;S.allies.forEach(a=>a.hp=a.max);{const nA=S.allies.filter(a=>a.type=='a').length,b=t=>S.fx.push({t,x:W/2,y:H*.4,l:3,c:'#ff6b5a',h:90});if(S.wave%3==0)b('⚠️ Vague de choc : CRS blindés !');else if(S.wave==5)b('☀️ L’après-midi s’installe…');else if(nA>=2)b('🚨 Tes artificiers attirent des CRS costauds');}S.toSpawn=4+S.wave*2;S.spT=0;['cans','gas','shots','booms'].forEach(k=>clear(S[k]));run=true;ov.style.display='none';last=performance.now();requestAnimationFrame(loop)}
 const msg=(t,c)=>S.fx.push({t,x:S.px,y:S.py,l:1,c,h:50});
@@ -119,4 +119,4 @@ for(const g of S.cans){g.t+=dt/1.1;const k=Math.min(1,g.t);g.x=g.sx+(g.tx-g.sx)*
  S.cops=keep(S.cops,c=>c.hp>0);
  S.fx.forEach(f=>{f.l-=dt;f.h+=30*dt});S.fx=S.fx.filter(f=>f.l>0);
  S.booms.forEach(b=>{b.l-=dt});S.booms=keep(S.booms,b=>b.l>0);shake=Math.max(0,shake-dt*3);updFX(dt);
- if(S.toSpawn==0&&S.cops.length
+ if(S.toSpawn==0&&
